@@ -1,0 +1,200 @@
+<!DOCTYPE HTML>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<title> Kyu </title>
+		<script type="text/javascript" src="common/js/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="common/css/reset.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+		<!-- 스타일 -->
+		<style type="text/css">
+		/* reset */
+		body { background:#e9e9e9; }
+		img, area { outline:none; cursor:default; }
+		h1 { padding:10px 0; font-size:28px; font-weight:bold; color:#000; }
+		h1 span { font-size:20px; font-weight:normal; }
+
+		#wrap { position:relative; margin:0 auto; padding:10px; width:1220px; font-family:'hw'; background:#fff; box-shadow:2px 2px 2px #666; -webkit-box-shadow:2px 2px 2px #666; }
+		#wrap p.info { position:absolute; right:10px; top:30px; font-size:12px; color:#000; }
+		#wrap p.info span { font-weight:bold; }
+		.game_wrap { position:relative; margin-bottom:10px; width:1200px; height:700px; }
+		.game { position:relative; width:1200px; height:700px;}
+		.game_wrap div.explain { position:absolute; left:20%; top:18%; margin:-50px 0 0 -50px; width:800px; height:400px; line-height:30px;  background:white; font-size:20px; text-align:left; color:black; cursor:pointer; z-index:10; }
+		.game_wrap div.start { position:absolute; left:50%; top:80%; margin:-50px 0 0 -50px; width:100px; height:100px; line-height:100px; border-radius:50%; background:#f00; font-size:24px; font-weight:bold; text-align:center; color:#fff; cursor:pointer; z-index:10; }
+		.game_wrap div.dimm { position:absolute; left:0; top:0; width:100%; height:100%; z-index:9; background:#000; opacity:0.9; filter:alpha(opacity=90); }
+
+		.ck { position:absolute; width:50px; height:50px; border:2px solid #f00; border-radius:50%; display:none; }
+		.ck1 { top:60px; }
+		.ck2 { top:300px; }
+		.ck3 { top:530px; }
+		.ck4 { top:165px; }
+		.ck5 { top:472px; }
+		.ck6 { top:375px; }
+		.ck7 { top:522px; }
+		.ck8 { top:362px; }
+		.ck9 { top:213px; }
+		.ck10 { top:4px; }
+
+		.game .ck1 { left:433px; }
+		.game .ck2 { left:235px; }
+		.game .ck3 { left:110px; }
+		.game .ck4 { left:297px; }
+		.game .ck5 { left:360px; }
+		.game .ck6 { left:500px; }
+		.game .ck7 { left:750px; }
+		.game .ck8 { left:957px; }
+		.game .ck9 { left:912px; }
+		.game .ck10 { left:1145px; }
+
+		.status_bar { position:relative; width:1200px; height:15px; background:#eee; border-radius:5px; -webkit-border-radius:5px; overflow:hidden; }
+		.status_bar div.gage { position:absolute; left:0; top:0; width:0; height:15px; background:#000; }
+		.success, .fail { position:absolute; left:50%; top:50%; margin:-50px 0 0 -50px; width:100px; height:100px; line-height:100px; border:2px solid #000; background:#fff; font-size:24px; font-weight:bold; text-align:left; color:#000; display:none; border-radius:5px; -webkit-border-radius:5px; }
+
+		#myModal {display: none;}
+		</style>
+		<!-- // 스타일 -->
+
+	</head>
+	<body>
+
+		<div id="wrap">
+			<h1 style="text-align:center;">숨은 캐릭 찾기</h1>
+			<!--<p class="info">※ 제한시간 1분안에 숨은캐릭<span>(총 ??개)</span>찾기</p>-->
+			<div class="game_wrap">
+				<div class="game">
+					<img src="img/img1.jpg" usemap="#map1" alt="img" />
+					<div class="ck ck1"></div>
+					<div class="ck ck2"></div>
+					<div class="ck ck3"></div>
+					<div class="ck ck4"></div>
+					<div class="ck ck5"></div>
+					<div class="ck ck6"></div>
+					<div class="ck ck7"></div>
+					<div class="ck ck8"></div>
+					<div class="ck ck9"></div>
+					<div class="ck ck10"></div>
+				</div>
+				<div class="dimm"></div>
+				<div class="explain">
+					<pre>
+
+
+ * START를 클릭하면 시작합니다
+ * 제한시간 30초안에 숨어있는 모든 캐릭 ??명을 찾으면 성공입니다
+ * 제한시간 내에 찾지 못할 시 Game Over됩니다
+ * 숨어 있는 캐릭을 선택해서 빨간 동그라미가 그려지면 찾아진겁니다
+   (좌표 오류가 있을때는 캐릭이 보이는 곳의 아무곳이나 클릭하다보면
+    정답처리가 될 것입니다..?)
+
+ ** 재미로 만든 것으로 상업적 목적으로 절대 이용하지 않습니다
+    재미로 즐겨주시고 오류를 찾으면 알려주시면 감사하겠습니다
+				</div>
+				<div class="start">START</div>
+				<div class="success">성공!</div>
+
+					<div id="myModal" class="modal fade" role="dialog">
+						<div class="modal-dialog">
+							<!-- Modal content-->
+							<div class="modal-content">
+								<div class="modal-header">
+									<h4 class="modal-title"></h4>
+								</div>
+								<div class="modal-body">
+									<p id="modalP"></p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" id="modalBtn" class="btn btn-default" data-dismiss="modal">처음으로</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+			</div>
+			<div class="status_bar">
+				<div class="gage"></div>
+			</div>
+			<map name="map1" id="map1">
+				<area shape="poly" coords="469,45,452,71,447,109,473,113,476,83" href="" alt="뿌나" />
+				<area shape="poly" coords="248,307,246,335,260,364,275,362,284,330" href="" alt="은행" />
+				<area shape="poly" coords="137,533,129,550,139,583,151,564,144,544" href="" alt="접속" />
+				<area shape="poly" coords="322,181,315,183,318,207,329,205,329,190" href="" alt="퀴즈" />
+				<area shape="poly" coords="359,502,420,503,420,490,378,487" href="" alt="파파" />
+				<area shape="poly" coords="523,382,511,404,530,420,545,417,531,397" href="" alt="아딸" />
+				<area shape="poly" coords="784,522,757,561,779,571,799,543" href="" alt="낭만" />
+				<area shape="poly" coords="982,372,977,385,985,415,990,386" href="" alt="팔크" />
+				<area shape="poly" coords="932,219,920,250,952,257,949,230" href="" alt="서울" />
+				<area shape="poly" coords="1187,4,1175,17,1174,29,1167,45,1192,45,1198,16" href="" alt="우상" />
+			</map>
+		</div>
+		<!-- // wrap -->
+
+		<!-- 스크립트 -->
+		<script type="text/javascript">
+
+		// 시작
+		$('.game_wrap div.start').on('click', function(){
+			var gTime = 30000;
+			$('.game_wrap div.start, .game_wrap div.explain, .game_wrap div.dimm, #wrap p.info').fadeOut('fast');
+			$('.status_bar div.gage').animate({'width':'100%'}, gTime);
+
+//			$("#myModal").modal("show").on("shown", function () {
+//       window.setTimeout(function () {
+//						$("#myModal").modal("hide");
+// 				}
+//       }, gTime);
+//			});
+
+			// 실패
+			setTimeout(function(){
+				if($('.ck1').css('display')=='none' || $('.ck2').css('display')=='none'
+						|| $('.ck3').css('display')=='none' || $('.ck4').css('display')=='none' || $('.ck5').css('display')=='none'
+					  || $('.ck6').css('display')=='none' || $('.ck7').css('display')=='none' || $('.ck8').css('display')=='none'
+				    || $('.ck9').css('display')=='none' || $('.ck10').css('display')=='none'){
+						$('#modalP').text('Game Over');
+						$("#myModal").modal("show");
+				}
+			}, gTime);
+		});
+
+		// 틀린 부분
+		$('#map1 area').on('click', function(){
+			var idx = $('#map1 area').index(this);
+			console.log(idx);
+			if(idx==0) $('.ck1').show();
+			if(idx==1) $('.ck2').show();
+			if(idx==2) $('.ck3').show();
+			if(idx==3) $('.ck4').show();
+			if(idx==4) $('.ck5').show();
+			if(idx==5) $('.ck6').show();
+			if(idx==6) $('.ck7').show();
+			if(idx==7) $('.ck8').show();
+			if(idx==8) $('.ck9').show();
+			if(idx==9) $('.ck10').show();
+			success();
+			return false;
+		});
+
+		// 성공
+		function success(){
+			if($('.ck1').css('display')=='block' && $('.ck2').css('display')=='block'
+					&& $('.ck3').css('display')=='block' && $('.ck4').css('display')=='block' && $('.ck5').css('display')=='block'
+					&& $('.ck6').css('display')=='block' && $('.ck7').css('display')=='block' && $('.ck8').css('display')=='block'
+					&& $('.ck9').css('display')=='block' && $('.ck10').css('display')=='block'){
+				$('.status_bar div.gage').stop();
+				$('.modal-title').text('성공');
+				$('#modalP').text('대단한 눈썰미..!');
+				$("#myModal").modal("show");
+			}
+		}
+
+		$('#modalBtn').on('click', function(){
+			window.location.reload();
+		})
+		</script>
+		<!-- // 스크립트 -->
+
+	</body>
+</html>
